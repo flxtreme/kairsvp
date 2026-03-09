@@ -34,6 +34,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: List output
+        run: ls -la out/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
