@@ -36,9 +36,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL = "https://flxtreme.github.io/kairsvp";
+
 export const metadata: Metadata = {
   title: "Kaiden Felix's",
-  description: "You are invited to Kaiden Felix's Chirstening and 1st Birthday Party.",
+  description: "You are invited to Kaiden Felix's Christening and 1st Birthday Party.",
+  metadataBase: new URL(BASE_URL),
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Kaiden Felix's Christening & 1st Birthday 🦁",
+    description: "You are invited to Kaiden Felix's Christening and 1st Birthday Party.",
+    url: BASE_URL,
+    siteName: "Kaiden Felix's Safari",
+    images: [
+      {
+        url: "/preview.png",
+        width: 1200,
+        height: 630,
+        alt: "Kaiden Felix's Christening & 1st Birthday Party Invitation",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kaiden Felix's Christening & 1st Birthday 🦁",
+    description: "You are invited to Kaiden Felix's Christening and 1st Birthday Party.",
+    images: ["/preview.png"],
+  },
 };
 
 export default function RootLayout({
