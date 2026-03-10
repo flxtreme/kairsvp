@@ -86,7 +86,7 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
     <div className={`pointer-events-none absolute z-400 inset-0 transition-opacity duration-300 ${hideControls ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
 
       {/* ── BOTTOM TOOLBAR ── */}
-      <div className="absolute bottom-24 inset-x-0 flex justify-center pointer-events-none">
+      <div className="absolute bottom-36 inset-x-0 flex justify-center pointer-events-none">
         <div className="relative flex items-center gap-px pointer-events-auto shadow-xl rounded-sm overflow-visible">
 
           {/* PREV */}
@@ -144,7 +144,7 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
                 {STEPS.map((s, i) => (
                   <button
                     key={i}
-                    onClick={() => goTo(i)}
+                    onClick={() => goTo(s.index)}
                     className={`${btn} h-9 px-3 justify-start gap-2 text-xs tracking-wider whitespace-nowrap w-full ${current === i ? "bg-amber-700" : ""}`}
                   >
                     <span className="text-sm leading-none">{s.emoji}</span>
