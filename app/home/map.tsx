@@ -134,26 +134,26 @@ const TREE_MARKERS = [...churchTrees, ...receptionTrees, ...campTrees, ...extraT
 const ALL_TREE_COORDS = TREE_MARKERS.map(t => t.coords);
 
 const ANIMAL_EMOJIS: { sprite: string; size: [number, number]; captureRate: number }[] = [
-  { sprite: "🐅", size: [2, 2.5], captureRate: 0.50 },  // Hard
-  { sprite: "🐆", size: [2, 2.5], captureRate: 0.50 },  // Hard
-  { sprite: "🐘", size: [3, 4],   captureRate: 0.65 },  // Medium
-  { sprite: "🦣", size: [3, 4],   captureRate: 0.55 },  // Hard
-  { sprite: "🦏", size: [2, 3],   captureRate: 0.65 },  // Medium
-  { sprite: "🦛", size: [2, 3],   captureRate: 0.65 },  // Medium
-  { sprite: "🦒", size: [3, 4],   captureRate: 0.75 },  // Easy
-  { sprite: "🦘", size: [2, 2.5], captureRate: 0.70 },  // Easy
-  { sprite: "🦨", size: [1, 1],   captureRate: 0.90 },  // Very Easy
-  { sprite: "🦡", size: [1, 1],   captureRate: 0.85 },  // Very Easy
-  { sprite: "🦔", size: [1, 1],   captureRate: 0.90 },  // Very Easy
-  { sprite: "🦇", size: [1, 1],   captureRate: 0.80 },  // Easy
-  { sprite: "🦅", size: [1, 1],   captureRate: 0.60 },  // Medium
-  { sprite: "🦉", size: [1, 1],   captureRate: 0.80 },  // Easy
-  { sprite: "🦩", size: [1, 1],   captureRate: 0.85 },  // Very Easy
-  { sprite: "🦚", size: [1, 1],   captureRate: 0.80 },  // Easy
-  { sprite: "🦜", size: [1, 1],   captureRate: 0.85 },  // Very Easy
-  { sprite: "🐊", size: [2, 3],   captureRate: 0.55 },  // Hard
-  { sprite: "🐍", size: [1, 2],   captureRate: 0.70 },  // Easy
-  { sprite: "🐢", size: [1, 1],   captureRate: 0.95 },  // Very Easy
+  { sprite: "🐅", size: [2, 2.5], captureRate: 0.50 },
+  { sprite: "🐆", size: [2, 2.5], captureRate: 0.50 },
+  { sprite: "🐘", size: [3, 4],   captureRate: 0.65 },
+  { sprite: "🦣", size: [3, 4],   captureRate: 0.55 },
+  { sprite: "🦏", size: [2, 3],   captureRate: 0.65 },
+  { sprite: "🦛", size: [2, 3],   captureRate: 0.65 },
+  { sprite: "🦒", size: [3, 4],   captureRate: 0.75 },
+  { sprite: "🦘", size: [2, 2.5], captureRate: 0.70 },
+  { sprite: "🦨", size: [1, 1],   captureRate: 0.90 },
+  { sprite: "🦡", size: [1, 1],   captureRate: 0.85 },
+  { sprite: "🦔", size: [1, 1],   captureRate: 0.90 },
+  { sprite: "🦇", size: [1, 1],   captureRate: 0.80 },
+  { sprite: "🦅", size: [1, 1],   captureRate: 0.60 },
+  { sprite: "🦉", size: [1, 1],   captureRate: 0.80 },
+  { sprite: "🦩", size: [1, 1],   captureRate: 0.85 },
+  { sprite: "🦚", size: [1, 1],   captureRate: 0.80 },
+  { sprite: "🦜", size: [1, 1],   captureRate: 0.85 },
+  { sprite: "🐊", size: [2, 3],   captureRate: 0.55 },
+  { sprite: "🐍", size: [1, 2],   captureRate: 0.70 },
+  { sprite: "🐢", size: [1, 1],   captureRate: 0.95 },
 ];
 
 function randomNearTree(rng: () => number): [number, number] {
@@ -247,7 +247,6 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
           filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
           animation: animalBounce 1.4s ease-in-out infinite;
         }
-
 
         @keyframes captureFlash {
           0%   { opacity: 0; transform: scale(0.7); }
@@ -377,8 +376,6 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
           popupAnchor: [0, -50],
         });
 
-
-
       TREE_MARKERS.forEach(({ coords, emoji, size }) => {
         L.marker(coords, { icon: treeIcon(emoji, size), interactive: false, zIndexOffset: -1000 })?.addTo(map);
       });
@@ -476,7 +473,6 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
             flashRef.current?.(sprite);
             setTimeout(() => flashRef.current?.(null), 1400);
           } else {
-            // Animal got away — remove it and show shake feedback
             onCapture();
             flashFailedRef.current?.(true);
             setTimeout(() => flashFailedRef.current?.(false), 1200);
@@ -511,44 +507,42 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         animalData.forEach(a => { try { a.marker.remove(); } catch {} });
         animalData = [];
 
-        const count = 3 + Math.floor(Math.random() * 3); // 3, 4, or 5
+        const count = 3 + Math.floor(Math.random() * 3);
         const shuffled = [...ANIMAL_EMOJIS].sort(() => Math.random() - 0.5);
 
         for (let i = 0; i < count; i++) {
           try {
-          const animal = shuffled[i % shuffled.length];
-          const fontSize = animal.size[0] + Math.random() * (animal.size[1] - animal.size[0]);
-          const coords = randomNearTree(rng);
-          const delay = Math.floor(rng() * 800);
-          const marker = L.marker(coords, {
-            icon: animalIcon(animal.sprite, delay, fontSize),
-            interactive: true,
-            zIndexOffset: -500,
-          })?.addTo(instanceRef.current);
+            const animal = shuffled[i % shuffled.length];
+            const fontSize = animal.size[0] + Math.random() * (animal.size[1] - animal.size[0]);
+            const coords = randomNearTree(rng);
+            const delay = Math.floor(rng() * 800);
+            const marker = L.marker(coords, {
+              icon: animalIcon(animal.sprite, delay, fontSize),
+              interactive: true,
+              zIndexOffset: -500,
+            })?.addTo(instanceRef.current);
 
-          if (!marker) continue;
+            if (!marker) continue;
 
-          const sprite = animal.sprite;
-          const captureRate = animal.captureRate;
-          const entry = { marker, coords, sprite, captureRate };
-          animalData.push(entry);
+            const sprite = animal.sprite;
+            const captureRate = animal.captureRate;
+            const entry = { marker, coords, sprite, captureRate };
+            animalData.push(entry);
 
-          marker.on("click", (e: any) => {
-            e.originalEvent.stopPropagation();
-            instanceRef.current?.flyTo(entry.coords, FLY_ZOOM, { duration: 0.8 });
-            // Wait for fly to finish then show tooltip
-            setTimeout(() => {
-              showAnimalTooltip(marker, sprite, captureRate, () => {
-                marker.remove();
-                const idx = animalData.indexOf(entry);
-                if (idx !== -1) animalData.splice(idx, 1);
-              });
-            }, 900);
-          });
-          } catch (e) { /* map may have been removed, skip this animal */ }
+            marker.on("click", (e: any) => {
+              e.originalEvent.stopPropagation();
+              instanceRef.current?.flyTo(entry.coords, FLY_ZOOM, { duration: 0.8 });
+              setTimeout(() => {
+                showAnimalTooltip(marker, sprite, captureRate, () => {
+                  marker.remove();
+                  const idx = animalData.indexOf(entry);
+                  if (idx !== -1) animalData.splice(idx, 1);
+                });
+              }, 900);
+            });
+          } catch (e) { /* map may have been removed */ }
         }
 
-        // Wander every 5s
         wanderInterval = setInterval(() => {
           if (!instanceRef.current) return;
           animalData.forEach(animal => {
@@ -577,18 +571,15 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
       const remaining = storedNextRespawn - Date.now();
 
       if (remaining > 0) {
-        // Timer still pending — wait out the remainder, then start interval
         respawnInterval = setTimeout(() => {
           doRespawn();
           respawnInterval = setInterval(doRespawn, RESPAWN_MS);
         }, remaining);
       } else {
-        // Lapsed or first load — spawn immediately, then every 30s
         doRespawn();
         respawnInterval = setInterval(doRespawn, RESPAWN_MS);
       }
 
-      // Close tooltips on map drag/click
       map.on("dragstart click", closeAllTooltips);
 
       (map as any)._animalCleanup = () => {
@@ -632,9 +623,12 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         leafletMarkers.push(lm);
       });
 
-      map.on("dragstart", () => { leafletMarkers.forEach((lm) => lm.closePopup()); mountainMarkers.forEach(m => m.closePopup()); });
-
       const mountainMarkers: any[] = [];
+
+      map.on("dragstart", () => {
+        leafletMarkers.forEach((lm) => lm.closePopup());
+        mountainMarkers.forEach(m => m.closePopup());
+      });
 
       MOUNTAIN_PINS.forEach(({ coords, title, content }, idx) => {
         const icon = idx === 0 ? overlookIcon() : lagoonIcon();
@@ -656,7 +650,21 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
       const controls = {
         zoomIn: () => map.zoomIn(),
         zoomOut: () => map.zoomOut(),
-        flyTo: (index: number) => selectMarker(index),
+        flyTo: (index: number) => {
+          if (index <= 2) {
+            // Event markers: 0 = Church, 1 = Reception, 2 = Camp
+            selectMarker(index);
+          } else {
+            // Mountain pins: 3 = Overlook, 4 = Lagoon
+            const pin = MOUNTAIN_PINS[index - 3];
+            if (pin) {
+              leafletMarkers.forEach(m => m.closePopup());
+              mountainMarkers.forEach(m => m.closePopup());
+              map.flyTo(pin.coords, FLY_ZOOM, { duration: 1.2 });
+              setTimeout(() => mountainMarkers[index - 3]?.openPopup(), 1300);
+            }
+          }
+        },
         reset: () => {
           leafletMarkers.forEach((lm) => lm.closePopup());
           map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { duration: 1.2 });
@@ -678,13 +686,10 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
 
-      {/* Map renders first, below everything */}
       <div ref={mapRef} style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }} />
 
-      {/* Map controls — hidden while instructions are showing */}
       <MapControlsUI controls={mapControls} hideControls={showInstructions} onCloseMap={onCloseMap} />
 
-      {/* Capture success flash */}
       {flashCapture && (
         <div
           style={{
@@ -710,7 +715,6 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         </div>
       )}
 
-      {/* Capture failed flash */}
       {flashFailed && (
         <div
           style={{
@@ -736,7 +740,6 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         </div>
       )}
 
-      {/* Instructions overlay — rendered last so it's on top */}
       {showInstructions && (
         <div
           style={{
