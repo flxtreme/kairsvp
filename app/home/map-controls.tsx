@@ -10,9 +10,9 @@ interface Props {
 }
 
 const STEPS = [
-  { action: "flyTo", label: "Kaiden's Camp",      emoji: "🏕️", index: 0 },
-  { action: "flyTo", label: "St. Isidore Parish", emoji: "⛪",  index: 1 },
-  { action: "flyTo", label: "Cabuyao Reception",  emoji: "🍽️", index: 2 },
+  { action: "flyTo", label: "Kaiden's Camp",      emoji: "🏕️", index: 2 },
+  { action: "flyTo", label: "St. Isidore Parish", emoji: "⛪",  index: 0 },
+  { action: "flyTo", label: "Cabuyao Reception",  emoji: "🍽️", index: 1 },
   { action: "flyTo", label: "Overlook",           emoji: "⛰️",  index: 3 },
   { action: "flyTo", label: "Lagoon",             emoji: "🪷",  index: 4 },
 ] as const;
@@ -86,7 +86,7 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
     <div className={`pointer-events-none absolute z-400 inset-0 transition-opacity duration-300 ${hideControls ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
 
       {/* ── BOTTOM TOOLBAR ── */}
-      <div className="absolute bottom-28 inset-x-0 flex justify-center pointer-events-none">
+      <div className="absolute bottom-24 inset-x-0 flex justify-center pointer-events-none">
         <div className="relative flex items-center gap-px pointer-events-auto shadow-xl rounded-sm overflow-visible">
 
           {/* PREV */}
