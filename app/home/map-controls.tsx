@@ -10,6 +10,7 @@ interface Props {
 }
 
 const STEPS = [
+  { action: "reset", label: "Overview",      emoji: "N/A" },
   { action: "flyTo", label: "Kaiden's Camp",      emoji: "🏕️", index: 2 },
   { action: "flyTo", label: "St. Isidore Parish", emoji: "⛪",  index: 0 },
   { action: "flyTo", label: "Cabuyao Reception",  emoji: "🍽️", index: 1 },
@@ -69,6 +70,8 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
 
   const goTo = (stepIndex: number) => {
     const s = STEPS[stepIndex];
+    if ( s.action === "reset") return controls?.reset();
+
     controls?.flyTo(s.index);
     setCurrent(stepIndex);
     setShowActions(false);
@@ -144,7 +147,7 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
                 {STEPS.map((s, i) => (
                   <button
                     key={i}
-                    onClick={() => goTo(s.index)}
+                    onClick={() => goTo(i)}
                     className={`${btn} h-9 px-3 justify-start gap-2 text-xs tracking-wider whitespace-nowrap w-full ${current === i ? "bg-amber-700" : ""}`}
                   >
                     <span className="text-sm leading-none">{s.emoji}</span>
