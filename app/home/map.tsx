@@ -31,7 +31,7 @@ const MARKERS = [
         <div style="font-size:0.75rem;color:#78716c;line-height:1.4;margin-bottom:8px;">RED-V, Ibabang Dupay, Lucena City</div>
         <div style="display:flex;align-items:center;gap:4px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5" stroke="#92400e" stroke-width="1.5"/><polyline points="8,4.5 8,8.5 10.5,10.5" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span style="font-size:0.75rem;color:#92400e;font-weight:500;">9:00 AM</span>
+          <span style="font-size:0.75rem;color:#92400e;font-weight:500;">8:00 AM</span>
         </div>
       </div>
     `,
@@ -47,7 +47,7 @@ const MARKERS = [
         <div style="font-size:0.75rem;color:#78716c;line-height:1.4;margin-bottom:8px;">Mayao Silangan, Lucena City</div>
         <div style="display:flex;align-items:center;gap:4px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5" stroke="#92400e" stroke-width="1.5"/><polyline points="8,4.5 8,8.5 10.5,10.5" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span style="font-size:0.75rem;color:#92400e;font-weight:500;">10:00 AM</span>
+          <span style="font-size:0.75rem;color:#92400e;font-weight:500;">9:30 AM</span>
         </div>
       </div>
     `,
