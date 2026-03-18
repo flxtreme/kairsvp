@@ -15,7 +15,6 @@ export interface MapControls {
   reset: () => void;
 }
 
-const RSVP_URL = "https://forms.google.com";
 const CAPTURES_KEY = "safari_captures";
 const RESPAWN_KEY = "safari_next_respawn";
 const MINIGAME_KEY = "safari_minigame_accepted";
@@ -30,43 +29,26 @@ const MARKERS = [
         <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:4px;">Church</div>
         <div style="font-size:0.9rem;font-weight:600;color:#1c1410;line-height:1.3;margin-bottom:2px;">St. Isidore Parish Church</div>
         <div style="font-size:0.75rem;color:#78716c;line-height:1.4;margin-bottom:8px;">RED-V, Ibabang Dupay, Lucena City</div>
-        <div style="display:flex;align-items:center;gap:4px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:4px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5" stroke="#92400e" stroke-width="1.5"/><polyline points="8,4.5 8,8.5 10.5,10.5" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span style="font-size:0.75rem;color:#92400e;font-weight:500;">9:00 AM</span>
         </div>
-        <button data-action="go" data-target="1" style="width:100%;padding:5px 8px;background:#292524;color:#fef3c7;font-size:0.7rem;text-align:center;letter-spacing:0.08em;text-transform:uppercase;border-radius:2px;border:none;cursor:pointer;">
-          🍽️ Check Out the Event
-        </button>
       </div>
     `,
   },
   {
     coords: [13.952323269641392, 121.6434723394454] as [number, number],
     emoji: "🍽️",
-    label: "RSVP HERE",
+    label: "EVENT PLACE",
     popup: `
-      <div style="font-family:sans-serif;min-width:200px;">
+      <div style="font-family:sans-serif;min-width:180px;">
         <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:4px;">Reception</div>
         <div style="font-size:0.9rem;font-weight:600;color:#1c1410;line-height:1.3;margin-bottom:2px;">Cabuyao Reception Hall</div>
         <div style="font-size:0.75rem;color:#78716c;line-height:1.4;margin-bottom:8px;">Mayao Silangan, Lucena City</div>
-        <div style="display:flex;align-items:center;gap:4px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:4px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5" stroke="#92400e" stroke-width="1.5"/><polyline points="8,4.5 8,8.5 10.5,10.5" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span style="font-size:0.75rem;color:#92400e;font-weight:500;">10:00 AM</span>
         </div>
-        <div style="height:1px;background:#e5d9b0;margin-bottom:10px;"></div>
-        <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:6px;">Dress Code</div>
-        <div style="font-size:0.78rem;color:#1c1410;font-weight:600;margin-bottom:6px;">Safari Earth Tones:</div>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
-          <div title="Khaki" style="width:20px;height:20px;border-radius:50%;background:#c8b06a;border:1.5px solid #e5d9b0;flex-shrink:0;"></div>
-          <div title="Olive" style="width:20px;height:20px;border-radius:50%;background:#7a8c5a;border:1.5px solid #c5d0a8;flex-shrink:0;"></div>
-          <div title="Saddle Brown" style="width:20px;height:20px;border-radius:50%;background:#8b5c2a;border:1.5px solid #d4a97a;flex-shrink:0;"></div>
-          <div title="Warm Cream" style="width:20px;height:20px;border-radius:50%;background:#e8d9b8;border:1.5px solid #c8b88a;flex-shrink:0;"></div>
-          <div title="Forest Green" style="width:20px;height:20px;border-radius:50%;background:#4a6741;border:1.5px solid #8aad85;flex-shrink:0;"></div>
-        </div>
-        <div style="font-size:0.7rem;color:#92400e;font-style:italic;margin-bottom:12px;">Smart casual — no formal wear needed 🌿</div>
-        <a href="${RSVP_URL}" target="_blank" style="display:block;width:100%;box-sizing:border-box;padding:5px 8px;background:#92400e;color:#fef3c7;font-size:0.7rem;text-align:center;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;border-radius:2px;">
-          RSVP HERE
-        </a>
       </div>
     `,
   },
@@ -127,28 +109,37 @@ const swampTrees     = generateTrees([13.944111725539413, 121.63636114344037], 1
 const TREE_MARKERS = [...churchTrees, ...receptionTrees, ...campTrees, ...rockyTrees, ...swampTrees];
 const ALL_TREE_COORDS = TREE_MARKERS.map(t => t.coords);
 
-const ANIMAL_EMOJIS: { sprite: string; size: [number, number]; captureRate: number }[] = [
-  { sprite: "🐅", size: [2, 2.5], captureRate: 0.50 },
-  { sprite: "🐆", size: [2, 2.5], captureRate: 0.50 },
-  { sprite: "🐘", size: [3, 4],   captureRate: 0.65 },
-  { sprite: "🦣", size: [3, 4],   captureRate: 0.55 },
-  { sprite: "🦏", size: [2, 3],   captureRate: 0.65 },
-  { sprite: "🦛", size: [2, 3],   captureRate: 0.65 },
-  { sprite: "🦒", size: [3, 4],   captureRate: 0.75 },
-  { sprite: "🦘", size: [2, 2.5], captureRate: 0.70 },
-  { sprite: "🦨", size: [1, 1],   captureRate: 0.90 },
-  { sprite: "🦡", size: [1, 1],   captureRate: 0.85 },
-  { sprite: "🦔", size: [1, 1],   captureRate: 0.90 },
-  { sprite: "🦇", size: [1, 1],   captureRate: 0.80 },
-  { sprite: "🦅", size: [1, 1],   captureRate: 0.60 },
-  { sprite: "🦉", size: [1, 1],   captureRate: 0.80 },
-  { sprite: "🦩", size: [1, 1],   captureRate: 0.85 },
-  { sprite: "🦚", size: [1, 1],   captureRate: 0.80 },
-  { sprite: "🦜", size: [1, 1],   captureRate: 0.85 },
-  { sprite: "🐊", size: [2, 3],   captureRate: 0.55 },
-  { sprite: "🐍", size: [1, 2],   captureRate: 0.70 },
-  { sprite: "🐢", size: [1, 1],   captureRate: 0.95 },
+// points: 10 = legendary wild, 7-8 = rare, 5-6 = uncommon, 3-4 = common, 1-2 = easy
+const ANIMAL_EMOJIS: { sprite: string; size: [number, number]; captureRate: number; points: number }[] = [
+  { sprite: "🐅", size: [2, 2.5], captureRate: 0.25, points: 15 }, // Tiger — legendary
+  { sprite: "🐆", size: [2, 2.5], captureRate: 0.25, points: 15 }, // Leopard — legendary
+  { sprite: "🐊", size: [2, 3],   captureRate: 0.30, points: 12  }, // Croc — wild
+  { sprite: "🦣", size: [3, 4],   captureRate: 0.60, points: 6  }, // Mammoth — rare
+  { sprite: "🦅", size: [1, 1],   captureRate: 0.60, points: 6  }, // Eagle — rare
+  { sprite: "🦏", size: [2, 3],   captureRate: 0.60, points: 6  }, // Rhino
+  { sprite: "🦛", size: [2, 3],   captureRate: 0.60, points: 6  }, // Hippo
+  { sprite: "🐘", size: [3, 4],   captureRate: 0.60, points: 6  }, // Elephant
+  { sprite: "🦒", size: [3, 4],   captureRate: 0.60, points: 6  }, // Giraffe
+  { sprite: "🦘", size: [2, 2.5], captureRate: 0.60, points: 5  }, // Kangaroo
+  { sprite: "🐍", size: [1, 2],   captureRate: 0.85, points: 1  }, // Snake
+  { sprite: "🦇", size: [1, 1],   captureRate: 0.85, points: 1  }, // Bat
+  { sprite: "🦉", size: [1, 1],   captureRate: 0.85, points: 3  }, // Owl
+  { sprite: "🦚", size: [1, 1],   captureRate: 0.85, points: 5  }, // Peacock
+  { sprite: "🦩", size: [1, 1],   captureRate: 0.90, points: 5  }, // Flamingo
+  { sprite: "🦜", size: [1, 1],   captureRate: 0.90, points: 3  }, // Parrot
+  { sprite: "🦡", size: [1, 1],   captureRate: 0.90, points: 1  }, // Badger
+  { sprite: "🦨", size: [1, 1],   captureRate: 0.95, points: 1  }, // Skunk
+  { sprite: "🦔", size: [1, 1],   captureRate: 0.95, points: 2  }, // Hedgehog
+  { sprite: "🐢", size: [1, 1],   captureRate: 0.95, points: 1  }, // Turtle — easiest
 ];
+
+// Shared points map for use in both map.tsx and map-controls.tsx via window
+export const ANIMAL_POINTS: Record<string, number> = Object.fromEntries(
+  ANIMAL_EMOJIS.map(a => [a.sprite, a.points])
+);
+export const ANIMAL_CAPTURE_RATES: Record<string, number> = Object.fromEntries(
+  ANIMAL_EMOJIS.map(a => [a.sprite, a.captureRate])
+);
 
 function randomNearTree(rng: () => number): [number, number] {
   const tree = ALL_TREE_COORDS[Math.floor(rng() * ALL_TREE_COORDS.length)];
@@ -238,35 +229,15 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         iconSize: [140, 46], iconAnchor: [70, 46], popupAnchor: [0, -50],
       });
 
-      const giftIdeasIcon = () => L.divIcon({
-        className: "",
-        html: `<div class="flex flex-col items-center cursor-pointer"><div class="flex items-center gap-1.5 bg-amber-50 text-amber-900 text-[0.6rem] font-bold tracking-widest uppercase px-2 py-1.5 rounded shadow-md whitespace-nowrap border border-amber-300"><span class="text-sm leading-none">🪷</span><span>GIFT IDEAS</span></div><div class="w-0.5 h-2 bg-amber-300 mx-auto"></div><div class="w-1.5 h-1.5 bg-amber-300 rounded-full"></div></div>`,
-        iconSize: [130, 46], iconAnchor: [65, 46], popupAnchor: [0, -50],
-      });
-
       const animalIcon = (emoji: string, delay: number, fontSize: number) => L.divIcon({
         className: "",
         html: `<div class="animal-wrapper"><div class="animal-bounce" style="animation-delay:${delay}ms;font-size:${fontSize}rem;">${emoji}</div></div>`,
         iconSize: [44, 44], iconAnchor: [22, 22],
       });
 
-      const swampPuddleIcon = (scale: number) => L.divIcon({
-        className: "",
-        html: `<div style="pointer-events:none;user-select:none;opacity:0.7;"><svg width="${Math.round(40*scale)}" height="${Math.round(22*scale)}" viewBox="0 0 40 22" fill="none"><ellipse cx="20" cy="16" rx="18" ry="6" fill="#6ee7b7" fill-opacity="0.45" stroke="#34d399" stroke-width="0.8"/><ellipse cx="12" cy="16.5" rx="6" ry="2.5" fill="#a7f3d0" fill-opacity="0.5"/><ellipse cx="27" cy="15.5" rx="5" ry="2" fill="#a7f3d0" fill-opacity="0.5"/><circle cx="10" cy="13" r="1.8" fill="#f9a8d4" fill-opacity="0.9"/><circle cx="28" cy="14" r="1.4" fill="#fda4af" fill-opacity="0.9"/><line x1="20" y1="2" x2="20" y2="13" stroke="#7c6c3a" stroke-width="1.2" stroke-linecap="round"/><line x1="24" y1="4" x2="24" y2="13" stroke="#7c6c3a" stroke-width="1.2" stroke-linecap="round"/><line x1="16" y1="5" x2="16" y2="13" stroke="#7c6c3a" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="20" cy="2" rx="1.6" ry="2.8" fill="#a16207" fill-opacity="0.85"/><ellipse cx="24" cy="4" rx="1.3" ry="2.2" fill="#a16207" fill-opacity="0.85"/><ellipse cx="16" cy="5" rx="1.3" ry="2.2" fill="#a16207" fill-opacity="0.85"/></svg></div>`,
-        iconSize: [Math.round(40*scale), Math.round(22*scale)],
-        iconAnchor: [Math.round(20*scale), Math.round(22*scale)],
-      });
-
       // ── TREES ──
       TREE_MARKERS.forEach(({ coords, emoji, size }) => {
         L.marker(coords, { icon: treeIcon(emoji, size), interactive: false, zIndexOffset: -1000 }).addTo(map);
-      });
-
-      // ── SWAMP PUDDLES ──
-      const LAGOON_CENTER: [number, number] = [13.944111725539413, 121.63636114344037];
-      const swampOffsets: [number, number, number][] = [[-0.0010,0.0005,1.1],[0.0008,-0.0008,0.85],[-0.0005,-0.0012,1.0],[0.0013,0.0010,0.9],[0.0000,0.0015,1.2],[-0.0014,0.0012,0.8]];
-      swampOffsets.forEach(([dlat, dlng, scale]) => {
-        L.marker([LAGOON_CENTER[0]+dlat, LAGOON_CENTER[1]+dlng], { icon: swampPuddleIcon(scale), interactive: false, zIndexOffset: -900 }).addTo(map);
       });
 
       // ── ANIMALS ──
@@ -436,24 +407,10 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         leafletMarkers.push(lm);
       });
 
-      // ── MOUNTAIN PINS (Mini Game + Gift Ideas) ──
-      const GIFT_IDEAS_POPUP = `
-        <div style="font-family:sans-serif;min-width:200px;">
-          <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:4px;">Gift Ideas</div>
-          <div style="font-size:0.88rem;font-weight:600;color:#1c1410;margin-bottom:8px;line-height:1.4;">Your presence is the greatest gift!</div>
-          <div style="font-size:0.78rem;color:#57534e;line-height:1.7;margin-bottom:6px;">
-            But if you'd like to bring something:<br/>
-            🧸 Stuffed animals & plush toys<br/>
-            📚 Children's books<br/>
-            🦁 Safari-themed keepsakes<br/>
-            💛 Cash or GCash is also welcome
-          </div>
-          <div style="font-size:0.7rem;color:#92400e;font-style:italic;">No pressure — just come and celebrate! 🎉</div>
-        </div>`;
+      // ── MOUNTAIN PINS (Mini Game) ──
 
       const MOUNTAIN_COORDS = [
         [13.949319240144398, 121.63213171410052] as [number, number],
-        [13.944111725539413, 121.63636114344037] as [number, number],
       ];
 
       const mountainMarkers: any[] = [];
@@ -475,7 +432,7 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
             <div style="font-family:sans-serif;min-width:200px;">
               <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:4px;">Safari Mini-Game</div>
               <div style="font-size:0.88rem;font-weight:600;color:#1c1410;margin-bottom:8px;line-height:1.4;">Collect All the Animals! 🦁</div>
-              <div style="font-size:0.78rem;color:#57534e;line-height:1.7;margin-bottom:10px;">Tap an animal to zoom in, then press <strong style="color:#92400e;">Capture</strong>. Collect all 20 and claim a prize at the event! 🏆</div>
+              <div style="font-size:0.78rem;color:#57534e;line-height:1.7;margin-bottom:10px;">Tap an animal to zoom in, then press <strong style="color:#92400e;">Capture</strong>. Catch as many animals as you can and score the most points! 🏆</div>
               <div style="display:flex;gap:6px;justify-content:center;font-size:1.2rem;margin-bottom:12px;">🐅 🐘 🦒 🦜 🐊</div>
               <button data-action="enable-minigame" style="width:100%;padding:6px 8px;background:#92400e;color:#fef3c7;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;border-radius:2px;border:none;cursor:pointer;font-weight:600;">🌿 Start Hunting!</button>
             </div>`;
@@ -483,7 +440,12 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
 
         return `
           <div style="font-family:sans-serif;min-width:200px;">
-            <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;margin-bottom:4px;">Safari Mini-Game</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+              <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#92400e;">Safari Mini-Game</div>
+              <button data-action="show-instructions" title="How to play" style="background:none;border:1px solid #d6b87a;border-radius:50%;width:18px;height:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#92400e" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">?</text></svg>
+              </button>
+            </div>
             <div style="font-size:0.88rem;font-weight:600;color:#1c1410;margin-bottom:4px;line-height:1.4;">Your Collection 📷</div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               <div style="flex:1;background:#e5e7eb;border-radius:99px;height:6px;overflow:hidden;">
@@ -498,41 +460,13 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
       const openMinigamePopup = (lm: any) => {
         lm.setPopupContent(buildMinigamePopup());
         lm.openPopup();
-        setTimeout(() => {
-          const popup = lm.getPopup()?.getElement();
-          if (!popup) return;
-
-          // Wire start hunting button
-          const startBtn = popup.querySelector("[data-action='enable-minigame']") as HTMLElement | null;
-          if (startBtn) {
-            const fresh = startBtn.cloneNode(true) as HTMLElement;
-            startBtn.replaceWith(fresh);
-            fresh.addEventListener("click", (ev) => {
-              ev.stopPropagation();
-              enableMinigame();
-              // Refresh popup to show collection view
-              lm.setPopupContent(buildMinigamePopup());
-              setTimeout(() => wireMinigamePopupButtons(lm), 100);
-            });
-          }
-
-          // Wire view collection button
-          const viewBtn = popup.querySelector("[data-action='view-collection']") as HTMLElement | null;
-          if (viewBtn) {
-            const fresh = viewBtn.cloneNode(true) as HTMLElement;
-            viewBtn.replaceWith(fresh);
-            fresh.addEventListener("click", (ev) => {
-              ev.stopPropagation();
-              lm.closePopup();
-              window.dispatchEvent(new CustomEvent("safari:open-collection"));
-            });
-          }
-        }, 100);
+        setTimeout(() => wireMinigamePopupButtons(lm), 100);
       };
 
       const wireMinigamePopupButtons = (lm: any) => {
         const popup = lm.getPopup()?.getElement();
         if (!popup) return;
+
         const startBtn = popup.querySelector("[data-action='enable-minigame']") as HTMLElement | null;
         if (startBtn) {
           const fresh = startBtn.cloneNode(true) as HTMLElement;
@@ -544,6 +478,7 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
             setTimeout(() => wireMinigamePopupButtons(lm), 100);
           });
         }
+
         const viewBtn = popup.querySelector("[data-action='view-collection']") as HTMLElement | null;
         if (viewBtn) {
           const fresh = viewBtn.cloneNode(true) as HTMLElement;
@@ -552,6 +487,17 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
             ev.stopPropagation();
             lm.closePopup();
             window.dispatchEvent(new CustomEvent("safari:open-collection"));
+          });
+        }
+
+        const helpBtn = popup.querySelector("[data-action='show-instructions']") as HTMLElement | null;
+        if (helpBtn) {
+          const fresh = helpBtn.cloneNode(true) as HTMLElement;
+          helpBtn.replaceWith(fresh);
+          fresh.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            lm.closePopup();
+            window.dispatchEvent(new CustomEvent("safari:show-instructions"));
           });
         }
       };
@@ -569,18 +515,7 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
       });
       mountainMarkers.push(mgMarker);
 
-      // gift ideas marker (index 1)
-      const giMarker = L.marker(MOUNTAIN_COORDS[1], { icon: giftIdeasIcon(), zIndexOffset: -200 })
-        .addTo(map)
-        .bindPopup(GIFT_IDEAS_POPUP, { maxWidth: 240, closeOnClick: false, autoClose: false, closeButton: false });
-      giMarker.on("click", (e: any) => {
-        e.originalEvent.stopPropagation();
-        leafletMarkers.forEach(m => m?.closePopup());
-        mountainMarkers.forEach(m => { if (m !== giMarker) m?.closePopup(); });
-        map.flyTo(MOUNTAIN_COORDS[1], FLY_ZOOM, { duration: 1.2 });
-        giMarker.openPopup();
-      });
-      mountainMarkers.push(giMarker);
+
 
       // Also refresh minigame popup count when a capture happens
       window.addEventListener("safari:capture", () => {
