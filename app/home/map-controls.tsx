@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { MapControls } from "./map";
 
 interface Props {
@@ -8,15 +8,6 @@ interface Props {
   onCloseMap?: () => void;
   hideControls?: boolean;
 }
-
-const STEPS = [
-  { action: "reset", label: "Overview",      emoji: "N/A" },
-  { action: "flyTo", label: "Kaiden's Camp",      emoji: "🏕️", index: 2 },
-  { action: "flyTo", label: "St. Isidore Parish", emoji: "⛪",  index: 0 },
-  { action: "flyTo", label: "Cabuyao Reception",  emoji: "🍽️", index: 1 },
-  { action: "flyTo", label: "Overlook",           emoji: "⛰️",  index: 3 },
-  { action: "flyTo", label: "Lagoon",             emoji: "🪷",  index: 4 },
-] as const;
 
 const CAPTURES_KEY = "safari_captures";
 
@@ -40,45 +31,24 @@ function loadCaptures(): Record<string, number> {
 }
 
 export default function MapControlsUI({ controls, onCloseMap, hideControls }: Props) {
-  const [current, setCurrent] = useState(0);
   const [showInventory, setShowInventory] = useState(false);
-  const [showActions, setShowActions] = useState(false);
   const [captures, setCaptures] = useState<Record<string, number>>({});
-  const actionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setCaptures(loadCaptures()); }, []);
   useEffect(() => { if (showInventory) setCaptures(loadCaptures()); }, [showInventory]);
+
   useEffect(() => {
     const refresh = () => setCaptures(loadCaptures());
+    const openCollection = () => setShowInventory(true);
     window.addEventListener("safari:capture", refresh);
     window.addEventListener("storage", refresh);
+    window.addEventListener("safari:open-collection", openCollection);
     return () => {
       window.removeEventListener("safari:capture", refresh);
       window.removeEventListener("storage", refresh);
+      window.removeEventListener("safari:open-collection", openCollection);
     };
   }, []);
-
-  useEffect(() => {
-    if (!showActions) return;
-    const handler = (e: MouseEvent) => {
-      if (actionsRef.current && !actionsRef.current.contains(e.target as Node))
-        setShowActions(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [showActions]);
-
-  const goTo = (stepIndex: number) => {
-    const s = STEPS[stepIndex];
-    if ( s.action === "reset") return controls?.reset();
-
-    controls?.flyTo(s.index);
-    setCurrent(stepIndex);
-    setShowActions(false);
-  };
-
-  const prev = () => goTo((current - 1 + STEPS.length) % STEPS.length);
-  const next = () => goTo((current + 1) % STEPS.length);
 
   const totalCaptured = ALL_ANIMALS.filter(a => (captures[a] || 0) > 0).length;
   const isComplete = totalCaptured >= ALL_ANIMALS.length;
@@ -88,19 +58,37 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
   return (
     <div className={`pointer-events-none absolute z-400 inset-0 transition-opacity duration-300 ${hideControls ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
 
+      {/* ── TITLE ── */}
+      <div className="pointer-events-none absolute top-6 inset-x-0 flex justify-center">
+        <div className="font-lso text-amber-950/80 text-lg tracking-widest text-center drop-shadow-sm select-none">
+          Kaiden Felix&apos;s Safari
+        </div>
+      </div>
+
+      {/* ── RIGHT QUICK BUTTONS ── */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-px pointer-events-auto shadow-xl rounded-sm overflow-hidden">
+        <button
+          onClick={() => controls?.flyTo(0)}
+          className={`${btn} h-9 px-3 gap-2 text-xs tracking-wider whitespace-nowrap justify-start rounded-t-sm`}
+        >
+          <span className="text-sm leading-none">⛪</span>
+          <span className="font-lso">Church</span>
+        </button>
+        <button
+          onClick={() => controls?.flyTo(1)}
+          className={`${btn} h-9 px-3 gap-2 text-xs tracking-wider whitespace-nowrap justify-start rounded-b-sm`}
+        >
+          <span className="text-sm leading-none">🍽️</span>
+          <span className="font-lso">RSVP Here</span>
+        </button>
+      </div>
+
       {/* ── BOTTOM TOOLBAR ── */}
       <div className="absolute bottom-24 inset-x-0 flex justify-center pointer-events-none">
         <div className="relative flex items-center gap-px pointer-events-auto shadow-xl rounded-sm overflow-visible">
 
-          {/* PREV */}
-          <button onClick={prev} title="Previous" className={`${btn} w-10 h-10 rounded-l-sm`}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <polyline points="9,2 4,7 9,12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-
           {/* ZOOM IN */}
-          <button onClick={() => controls?.zoomIn()} title="Zoom in" className={`${btn} w-10 h-10`}>
+          <button onClick={() => controls?.zoomIn()} title="Zoom in" className={`${btn} w-10 h-10 rounded-l-sm`}>
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
               <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
               <line x1="7" y1="4.5" x2="7" y2="9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -119,76 +107,11 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
           </button>
 
           {/* RESET */}
-          <button onClick={() => { controls?.reset(); setCurrent(0); }} title="Reset view" className={`${btn} w-10 h-10`}>
+          <button onClick={() => controls?.reset()} title="Reset view" className={`${btn} w-10 h-10 rounded-r-sm`}>
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
               <path d="M8 2.5C5.0 2.5 2.5 5.0 2.5 8s2.5 5.5 5.5 5.5 5.5-2.5 5.5-5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <polyline points="10.5,1 13.5,3.5 10.5,5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
-            </svg>
-          </button>
-
-          {/* ACTION MENU */}
-          <div ref={actionsRef} className="relative">
-            <button
-              onClick={() => setShowActions(v => !v)}
-              title="Menu"
-              className={`${btn} w-10 h-10 ${showActions ? "bg-amber-700" : ""}`}
-            >
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="3" r="1.3" fill="currentColor"/>
-                <circle cx="8" cy="8" r="1.3" fill="currentColor"/>
-                <circle cx="8" cy="13" r="1.3" fill="currentColor"/>
-              </svg>
-            </button>
-
-            {showActions && (
-              <div className="absolute bottom-full mb-2 right-0 flex flex-col gap-px rounded-sm overflow-hidden shadow-xl min-w-44">
-
-                {STEPS.map((s, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goTo(i)}
-                    className={`${btn} h-9 px-3 justify-start gap-2 text-xs tracking-wider whitespace-nowrap w-full ${current === i ? "bg-amber-700" : ""}`}
-                  >
-                    <span className="text-sm leading-none">{s.emoji}</span>
-                    <span className="font-lso">{s.label}</span>
-                  </button>
-                ))}
-
-                <div className="h-px bg-amber-800/60" />
-
-                {/* Collection */}
-                <button
-                  onClick={() => { setShowInventory(true); setShowActions(false); }}
-                  className={`${btn} h-9 px-3 justify-start gap-2 text-xs tracking-wider whitespace-nowrap w-full ${isComplete ? "bg-emerald-700 hover:bg-emerald-600" : ""}`}
-                >
-                  {isComplete
-                    ? <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/><polyline points="4.5,8.5 7,11 11.5,5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    : <span className="text-sm leading-none">📷</span>
-                  }
-                  <span className="font-lso">Collection {totalCaptured}/{ALL_ANIMALS.length}</span>
-                </button>
-
-                {/* Close Map */}
-                <button
-                  onClick={() => { setShowActions(false); onCloseMap?.(); }}
-                  className={`${btn} h-9 px-3 justify-start gap-2 text-xs tracking-wider whitespace-nowrap w-full hover:bg-red-900`}
-                >
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                    <line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                  <span className="font-lso">Close Map</span>
-                </button>
-
-              </div>
-            )}
-          </div>
-
-          {/* NEXT */}
-          <button onClick={next} title="Next" className={`${btn} w-10 h-10 rounded-r-sm`}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <polyline points="5,2 10,7 5,12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
 
@@ -205,7 +128,6 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
             className="bg-amber-50 border border-amber-300 rounded-xl p-5 w-[min(340px,90vw)] max-h-[80vh] overflow-y-auto flex flex-col gap-4"
             onClick={e => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[0.6rem] tracking-widest uppercase text-amber-800 mb-0.5">Safari Collection</p>
@@ -219,7 +141,6 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
               </div>
             </div>
 
-            {/* Progress bar */}
             <div className="w-full bg-stone-200 rounded-full h-1 overflow-hidden">
               <div
                 className="bg-amber-800 h-full rounded-full transition-all duration-500"
@@ -227,7 +148,6 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
               />
             </div>
 
-            {/* Grid */}
             <div className="grid grid-cols-4 gap-2">
               {ALL_ANIMALS.map(sprite => {
                 const count = captures[sprite] || 0;
@@ -235,11 +155,7 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
                 return (
                   <div
                     key={sprite}
-                    className={`relative flex flex-col items-center gap-1 rounded-lg px-1.5 py-2.5 border transition-opacity
-                      ${captured
-                        ? "bg-amber-100 border-amber-300 opacity-100"
-                        : "bg-stone-100 border-stone-200 opacity-40"
-                      }`}
+                    className={`relative flex flex-col items-center gap-1 rounded-lg px-1.5 py-2.5 border ${captured ? "bg-amber-100 border-amber-300" : "bg-stone-100 border-stone-200 opacity-40"}`}
                   >
                     <span className={`text-3xl leading-none ${captured ? "" : "grayscale"}`}>{sprite}</span>
                     <span className="text-[0.5rem] text-stone-500 text-center tracking-wide">{ANIMAL_NAMES[sprite]}</span>
@@ -256,7 +172,6 @@ export default function MapControlsUI({ controls, onCloseMap, hideControls }: Pr
               })}
             </div>
 
-            {/* Close */}
             <button
               onClick={() => setShowInventory(false)}
               className="w-full bg-stone-900 text-amber-100 text-xs tracking-widest uppercase rounded py-2 cursor-pointer hover:bg-stone-700 transition-colors"

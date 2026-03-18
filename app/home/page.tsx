@@ -91,9 +91,6 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: 1.1 }}
                 >
-                  <div className="text-center absolute top-8 inset-x-0 z-2">
-                    Kaiden Felix's Safari
-                  </div>
 
                   <div className="absolute inset-0 z-1">
                     <LeafletMap onMapReady={setMapControls} onCloseMap={handleOnCloseMap} />
@@ -207,7 +204,7 @@ export default function Home() {
                   <div className="flex items-end justify-stretch gap-2 w-full px-3">
                     <div className="text-xs flex-1 flex flex-col items-start text-left">
                       <span>APRIL 19, 2026</span>
-                      <span className="text-sm">9:30 AM</span>
+                      <span className="text-sm">10:00 AM</span>
                     </div>
                     <div className="text-right text-xs ml-auto px-2 text-amber-100 flex items-center gap-2 animate-bounce bg-amber-950">
                       <span>for directions</span>
