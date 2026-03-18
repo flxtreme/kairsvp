@@ -300,7 +300,7 @@ export default function LeafletMap({ onMapReady, onCloseMap }: LeafletMapProps) 
         animalData.forEach(a => { try { a.marker.remove(); } catch {} });
         animalData = [];
         const shuffled = [...ANIMAL_EMOJIS].sort(() => Math.random() - 0.5);
-        const count = 3 + Math.floor(Math.random() * 3);
+        const count = 5 + Math.floor(Math.random() * 10);
         for (let i = 0; i < count; i++) {
           try {
             const animal = shuffled[i % shuffled.length];
